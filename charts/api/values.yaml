@@ -34,9 +34,9 @@ rollout:
   steps:
     - setWeight: 10
     - pause: {duration: 30s}
-    - analysis:
-        templates:
-          - templateName: '{{ .Release.Name }}'
+#    - analysis:
+#        templates:
+#          - templateName: '{{ .Release.Name }}'
     - setWeight: 50
     - pause: {duration: 30s}
   analysisMetrics:
