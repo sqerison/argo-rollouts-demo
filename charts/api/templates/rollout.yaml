@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1 # Changed from apps/v1
 kind: Rollout # Changed from Deployment
 metadata:
-  name: rollout
+  name: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   workloadRef:
