@@ -23,9 +23,36 @@ resources:
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   limits:
-    cpu: 500m
+    cpu: 300m
     memory: 500Mi
 
 ports:
   name: http
   protocol: TCP
+
+rollout:
+  steps:
+    - setWeight: 10
+    - pause: {duration: 30s}
+    - analysis:
+        templates:
+          - templateName: '{{ .Release.Name }}'
+    - setWeight: 50
+    - pause: {duration: 30s}
+  analysisMetrics:
+    - name: success-rate
+      interval: 5m
+      # NOTE: prometheus queries return results in the form of a vector.
+      # So it is common to access the index 0 of the returned array to obtain the value
+      successCondition: result[0] >= 0.95
+      failureLimit: 3
+      provider:
+        prometheus:
+          address: http://prometheus.example.com:9090
+          query: |
+            sum(irate(
+              istio_requests_total{reporter="source",destination_service=~"{{ .Release.Name }}",response_code!~"5.*"}[5m]
+            )) /
+            sum(irate(
+              istio_requests_total{reporter="source",destination_service=~"{{ .Release.Name }}"}[5m]
+            ))

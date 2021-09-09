@@ -22,10 +22,4 @@ spec:
           # This ingress will be cloned with a new name, in order to achieve NGINX traffic splitting.
           stableIngress: {{ .Release.Name }}
       steps:
-        - setWeight: 10
-        - pause: {duration: 30s}
-#        - analysis:
-#            templates:
-#              - templateName: '{{ .Release.Name }}'
-        - setWeight: 50
-        - pause: {duration: 30s}
+        {{- tpl (toYaml .Values.rollout.steps) . | nindent 8 }}
