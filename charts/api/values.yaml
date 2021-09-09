@@ -41,11 +41,12 @@ rollout:
     - pause: {duration: 10s}
   analysisMetrics:
     - name: cpu-usage
-      interval: 1m
+      interval: 30s
       # NOTE: prometheus queries return results in the form of a vector.
       # So it is common to access the index 0 of the returned array to obtain the value
       successCondition: result[0] >= 0.5
-      failureLimit: 3
+      count: 3
+      failureLimit: 2
       provider:
         prometheus:
           address: http://prometheus-kube-prometheus-prometheus.monitoring.svc:9090/prometheus
