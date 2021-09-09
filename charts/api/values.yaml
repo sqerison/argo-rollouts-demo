@@ -1,4 +1,4 @@
-replicaCount: 2
+replicaCount: 4
 
 image:
   repository: argoproj/rollouts-demo
@@ -18,7 +18,7 @@ resources:
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   limits:
     cpu: 300m
-    memory: 500Mi
+    memory: 501Mi
 
 ports:
   name: http
@@ -26,12 +26,14 @@ ports:
 
 rollout:
   steps:
-    - setWeight: 50
+    - setWeight: 25
     #- pause: {duration: 30s}
     - analysis:
         templates:
           - templateName: '{{ .Release.Name }}'
     - setWeight: 50
+    - pause: {duration: 10s}
+    - setWeight: 75
     - pause: {duration: 10s}
   analysisMetrics:
     - name: cpu-usage
