@@ -4,7 +4,7 @@ environment: "dev55"
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 4
+replicaCount: 2
 
 image:
   repository: argoproj/rollouts-demo
@@ -32,13 +32,13 @@ ports:
 
 rollout:
   steps:
-    - setWeight: 10
+    - setWeight: 50
     - pause: {duration: 30s}
 #    - analysis:
 #        templates:
 #          - templateName: '{{ .Release.Name }}'
-    - setWeight: 50
-    - pause: {duration: 30s}
+#    - setWeight: 50
+#    - pause: {duration: 30s}
   analysisMetrics:
     - name: success-rate
       interval: 5m
