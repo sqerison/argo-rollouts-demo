@@ -3,5 +3,8 @@ kind: AnalysisTemplate
 metadata:
   name: {{ .Release.Name }}
 spec:
+  args:
+    - name: service-name
+      value: {{ .Release.Name }}
   metrics:
   {{- toYaml .Values.rollout.analysisMetrics | nindent 4 }}
