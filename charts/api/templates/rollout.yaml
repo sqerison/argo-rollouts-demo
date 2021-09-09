@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1 # Changed from apps/v1
+kind: Rollout # Changed from Deployment
+metadata:
+  name: rollout
+spec:
+  replicas: {{ .Values.replicaCount }}
+  workloadRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Release.Name }}
+  minReadySeconds: 30
+  revisionHistoryLimit: 3
+  strategy:
+    canary:
+      # Reference to a Service which the controller will update to point to the canary ReplicaSet
+      canaryService: {{ .Release.Name }}-canary
+      # Reference to a Service which the controller will update to point to the stable ReplicaSet
+      stableService: {{ .Release.Name }}
+      trafficRouting:
+        nginx:
+          # Reference to an Ingress which has a rule pointing to the stable service (e.g. rollouts-demo-stable)
+          # This ingress will be cloned with a new name, in order to achieve NGINX traffic splitting.
+          stableIngress: {{ .Release.Name }}
+      steps:
+        - setWeight: 10
+        - pause: {duration: 30s}
+#        - analysis:
+#            templates:
+#              - templateName: '{{ .Release.Name }}'
+        - setWeight: 50
+        - pause: {duration: 30s}
