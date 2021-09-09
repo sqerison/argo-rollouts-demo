@@ -33,26 +33,21 @@ ports:
 rollout:
   steps:
     - setWeight: 50
-    - pause: {duration: 30s}
-#    - analysis:
-#        templates:
-#          - templateName: '{{ .Release.Name }}'
-#    - setWeight: 50
-#    - pause: {duration: 30s}
+    #- pause: {duration: 30s}
+    - analysis:
+        templates:
+          - templateName: '{{ .Release.Name }}'
+    - setWeight: 50
+    - pause: {duration: 10s}
   analysisMetrics:
-    - name: success-rate
-      interval: 5m
+    - name: cpu-usage
+      interval: 1m
       # NOTE: prometheus queries return results in the form of a vector.
       # So it is common to access the index 0 of the returned array to obtain the value
-      successCondition: result[0] >= 0.95
+      successCondition: result[0] >= 0.5
       failureLimit: 3
       provider:
         prometheus:
-          address: http://prometheus.example.com:9090
+          address: http://prometheus-kube-prometheus-prometheus.monitoring.svc:9090/prometheus
           query: |
-            sum(irate(
-              istio_requests_total{reporter="source",destination_service=~"{{args.service-name}}",response_code!~"5.*"}[5m]
-            )) /
-            sum(irate(
-              istio_requests_total{reporter="source",destination_service=~"{{args.service-name}}"}[5m]
-            ))
+            sum(rate(container_cpu_load_average_10s{namespace="demo", container="cloudbuilders-demo", id=~"/kubepods.*"}[5m])) by (container)
