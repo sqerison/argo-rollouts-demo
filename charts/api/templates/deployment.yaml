@@ -20,6 +20,8 @@ spec:
           args: [ "999" ]
           image: ubuntu:latest
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            privilege: true
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           ports:
