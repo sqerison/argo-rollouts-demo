@@ -16,9 +16,9 @@ spec:
     spec:
       containers:
         - name: {{ .Release.Name }}
-          command: [ "sleep" ]
-          args: [ "999" ]
-          image: ubuntu:latest # "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+#          command: [ "sleep" ]
+#          args: [ "999" ]
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           securityContext:
             privileged: false
