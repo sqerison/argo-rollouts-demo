@@ -15,7 +15,7 @@ spec:
         app: {{ .Release.Name }}
     spec:
       volumes:
-        - name: secret
+        - name: demo-secret
           secret:
             secretName: demo-secret
       containers:
@@ -24,6 +24,9 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: demo-secret
+              mountPath: "/etc/demo-secret"
           env:
             - name: my-api-key
               valueFrom:
