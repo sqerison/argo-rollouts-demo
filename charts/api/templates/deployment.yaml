@@ -20,7 +20,14 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: my-api-key
+              valueFrom:
+                secretKeyRef:
+                  name: demo-secret
+                  key: api-key
           ports:
             - name: {{ default "http" .Values.ports.name }}
               containerPort: {{ .Values.service.targetPort }}
               protocol: {{ default "TCP" .Values.ports.protocol }}
+
