@@ -29,16 +29,16 @@ spec:
             - name: {{ default "http" .Values.ports.name }}
               containerPort: {{ .Values.service.targetPort }}
               protocol: {{ default "TCP" .Values.ports.protocol }}
-#          volumeMounts:
-#            - name: demo-secret
-#              mountPath: "/etc/demo-secret"
-#          env:
-#            - name: my-api-key
-#              valueFrom:
-#                secretKeyRef:
-#                  name: demo-secret
-#                  key: api-key
-#      volumes:
-#        - name: demo-secret
-#          secret:
-#            secretName: demo-secret
+          volumeMounts:
+            - name: demo-secret
+              mountPath: "/etc/demo-secret"
+          env:
+            - name: my-api-key
+              valueFrom:
+                secretKeyRef:
+                  name: demo-secret
+                  key: api-key
+      volumes:
+        - name: demo-secret
+          secret:
+            secretName: demo-secret
