@@ -21,7 +21,7 @@ spec:
           image: ubuntu:latest
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           securityContext:
-            privilege: true
+            privileged: true
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           ports:
