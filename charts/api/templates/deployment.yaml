@@ -21,7 +21,7 @@ spec:
           image: ubuntu:latest
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           securityContext:
-            privileged: true
+            privileged: false
             readOnlyRootFilesystem: true
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
