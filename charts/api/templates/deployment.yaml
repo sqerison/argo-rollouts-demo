@@ -14,6 +14,10 @@ spec:
       labels:
         app: {{ .Release.Name }}
     spec:
+      volumes:
+        - name: secret
+          secret:
+            secretName: demo-secret
       containers:
         - name: {{ .Release.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -30,8 +34,3 @@ spec:
             - name: {{ default "http" .Values.ports.name }}
               containerPort: {{ .Values.service.targetPort }}
               protocol: {{ default "TCP" .Values.ports.protocol }}
-      volumes:
-        - name: demo-secret
-          secret:
-            secretName: demo-secret
-
