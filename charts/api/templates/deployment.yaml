@@ -14,16 +14,18 @@ spec:
       labels:
         app: {{ .Release.Name }}
     spec:
-      volumes:
-        - name: demo-secret
-          secret:
-            secretName: demo-secret
       containers:
         - name: {{ .Release.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          command: [ "sleep" ]
+          args: [ "999" ]
+          image: ubuntu:latest
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          ports:
+            - name: {{ default "http" .Values.ports.name }}
+              containerPort: {{ .Values.service.targetPort }}
+              protocol: {{ default "TCP" .Values.ports.protocol }}
           volumeMounts:
             - name: demo-secret
               mountPath: "/etc/demo-secret"
@@ -33,7 +35,7 @@ spec:
                 secretKeyRef:
                   name: demo-secret
                   key: api-key
-          ports:
-            - name: {{ default "http" .Values.ports.name }}
-              containerPort: {{ .Values.service.targetPort }}
-              protocol: {{ default "TCP" .Values.ports.protocol }}
+      volumes:
+        - name: demo-secret
+          secret:
+            secretName: demo-secret
