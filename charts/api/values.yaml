@@ -47,4 +47,4 @@ rollout:
         prometheus:
           address: http://prometheus-kube-prometheus-prometheus.monitoring.svc:9090/prometheus
           query: |
-            sum(rate(container_cpu_load_average_10s{namespace="demo", container="cloudbuilders-demo", id=~"/kubepods.*"}[5m]))
+            sum(rate(container_cpu_load_average_10s{namespace="default", container="it-arena-demo", id=~"/kubepods.*"}[5m]))
