@@ -18,7 +18,7 @@ resources:
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   limits:
     cpu: 300m
-    memory: 400Mi
+    memory: 401Mi
 
 ports:
   name: http
